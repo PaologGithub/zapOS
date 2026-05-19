@@ -1,0 +1,6 @@
+ext fun println(s: String) Void;
+
+fun main() Int {
+    println("Hello, Zap");
+    return 0;
+}

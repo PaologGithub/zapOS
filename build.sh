@@ -1,0 +1,1 @@
+zapc src/main.zp -o build/main
