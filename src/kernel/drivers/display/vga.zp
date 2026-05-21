@@ -1,0 +1,41 @@
+ext fun get_shift_in() Char;
+ext fun get_string_len(s: *Char) Int;
+ext fun get_char_at(s: *Char, i: Int) Char;
+
+global var current_col: Int;
+global var current_row: Int;
+
+pub fun print_text(s: String) {
+    var chars: *Char = s as *Char;
+    var col: Int = current_col;
+    var row: Int = current_row;
+
+    unsafe {
+        var vga: *Char = 0xB8000 as *Char;
+        var shift_in: Char = get_shift_in();
+
+        var i: Int = 0;
+        var len: Int = get_string_len(chars);
+
+        while i < len {
+            var char: Char = get_char_at(chars, i);
+
+            if char == '\n' {
+                col = 0;
+                row = row + 1;
+            } else {
+                var offset: Int = ((row * 80) + col) * 2;
+
+                *(vga + offset) = char;
+                *(vga + offset + 1) = shift_in;
+            
+                col = col + 1;
+            }
+
+            i = i + 1;
+        }
+    }
+
+    current_col = col;
+    current_row = row;
+}
