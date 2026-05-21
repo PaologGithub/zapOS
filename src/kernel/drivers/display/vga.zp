@@ -5,11 +5,9 @@ ext fun get_char_at(s: *Char, i: Int) Char;
 global var current_col: Int;
 global var current_row: Int;
 
-pub fun print_text(s: String) {
-    var chars: *Char = s as *Char;
-    var col: Int = current_col;
-    var row: Int = current_row;
-
+// For printing single-lines strings
+// Internal helper
+fun print(chars: *Char) {
     unsafe {
         var vga: *Char = 0xB8000 as *Char;
         var shift_in: Char = get_shift_in();
@@ -17,25 +15,33 @@ pub fun print_text(s: String) {
         var i: Int = 0;
         var len: Int = get_string_len(chars);
 
-        while i < len {
+        for var i: Int = 0; i < get_string_len(chars); i = i + 1 {
             var char: Char = get_char_at(chars, i);
 
             if char == '\n' {
-                col = 0;
-                row = row + 1;
+                current_col = 0;
+                current_row = current_row + 1;
             } else {
-                var offset: Int = ((row * 80) + col) * 2;
+                var offset: Int = ((current_row * 80) + current_col) * 2;
 
                 *(vga + offset) = char;
                 *(vga + offset + 1) = shift_in;
-            
-                col = col + 1;
-            }
 
-            i = i + 1;
+                current_col = current_col + 1;
+            }
         }
     }
+}
 
-    current_col = col;
-    current_row = row;
+// Print the text and add an \n at the end
+pub fun println(text: String) {
+    print(text as *Char);
+
+    current_col = 0;
+    current_row = current_row + 1;
+}
+
+// Print the text
+pub fun print(text: String) {
+    print(text as *Char);
 }

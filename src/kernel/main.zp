@@ -3,9 +3,9 @@ import "drivers/display/vga" as vga_display;
 @extern("C")
 fun kmain() {
     unsafe {
-        vga_display.print_text("KERNEL OK\nWelcome to zapOS");
-        vga_display.print_text("Hello, World!");
-        vga_display.print_text("It works!");
+        vga_display.println("KERNEL OK\nWelcome to zapOS");
+        vga_display.println("Hello, World!");
+        vga_display.println("It works!");
     }
 
     while (true) {}
