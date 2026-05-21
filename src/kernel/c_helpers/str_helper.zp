@@ -1,0 +1,2 @@
+pub ext fun get_string_len(s: *Char) Int;
+pub ext fun get_char_at(s: *Char, i: Int) Char;

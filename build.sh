@@ -9,7 +9,8 @@ nasm -f elf64 src/boot/main.asm -o build/output/main.o
 nasm -f elf64 src/boot/main64.asm -o build/output/main64.o
 
 # C
-gcc -m64 -ffreestanding -c src/kernel/vga.c -o build/output/vga.o
+gcc -m64 -ffreestanding -c src/kernel/c_helpers/vga_helper.c -o build/output/vga_helper.o
+gcc -m64 -ffreestanding -c src/kernel/c_helpers/str_helper.c -o build/output/str_helper.o
 
 # Zap
 zapc -nostdlib --allow-unsafe -c src/kernel/main.zp

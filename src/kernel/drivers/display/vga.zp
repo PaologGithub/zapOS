@@ -1,8 +1,6 @@
 import "vga_color" { ForegroundColor, BackgroundColor };
-
-ext fun get_char_from_int(charint: Int) Char;
-ext fun get_string_len(s: *Char) Int;
-ext fun get_char_at(s: *Char, i: Int) Char;
+import "../../c_helpers/str_helper" { get_string_len, get_char_at };
+import "../../c_helpers/vga_helper" { get_char_from_int };
 
 global var current_col: Int;
 global var current_row: Int;

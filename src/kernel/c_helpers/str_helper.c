@@ -1,7 +1,3 @@
-char get_char_from_int(int charint) {
-    return (char) charint;
-}
-
 int get_string_len(char string[]) {
     int len = 0;
 
