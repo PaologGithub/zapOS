@@ -1,6 +1,9 @@
 import "drivers/display/vga" as vga_display;
 import "drivers/display/vga_color" { ForegroundColor };
 
+import "drivers/keyboard/ps2" as ps2_keyboard;
+import "drivers/keyboard/ascii.zp" { raw_key_to_ascii };
+
 @extern("C")
 fun kmain() {
     vga_display.println("KERNEL OK", ForegroundColor.Green);
@@ -8,5 +11,12 @@ fun kmain() {
     vga_display.println("Hello, World!");
     vga_display.println("It works!");
 
-    while (true) {}
+    while (true) {
+        var key: Char = ps2_keyboard.get_key();
+        var char: Char = raw_key_to_ascii(key);
+
+        if char != '\0' {
+            vga_display.print_char(char, ForegroundColor.Cyan);
+        }
+    }
 }

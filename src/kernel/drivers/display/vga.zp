@@ -1,6 +1,6 @@
 import "vga_color" { ForegroundColor, BackgroundColor };
 import "../../c_helpers/str_helper" { get_string_len, get_char_at };
-import "../../c_helpers/vga_helper" { get_char_from_int };
+import "../../c_helpers/int_helper" { get_char_from_int };
 
 global var current_col: Int;
 global var current_row: Int;
@@ -10,10 +10,6 @@ global var current_row: Int;
 fun print_text(chars: *Char, color: Char) {
     unsafe {
         var vga: *Char = 0xB8000 as *Char;
-        var shift_in: Char = get_char_from_int(0x0F);
-
-        var i: Int = 0;
-        var len: Int = get_string_len(chars);
 
         for var i: Int = 0; i < get_string_len(chars); i = i + 1 {
             var char: Char = get_char_at(chars, i);
@@ -119,4 +115,44 @@ pub fun print(text: String, bg: BackgroundColor) {
     var fg: ForegroundColor = ForegroundColor.White;
 
     print(text, bg, fg);
+}
+
+
+// Print char
+pub fun print_char(char: Char, bg: BackgroundColor, fg: ForegroundColor) {
+    unsafe {
+        var vga: *Char = 0xB8000 as *Char;
+        var color: Char = get_color(bg, fg);
+
+        if char == '\n' {
+            current_col = 0;
+            current_row = current_row + 1;
+        } else {
+            var offset: Int = ((current_row * 80) + current_col) * 2;
+
+            *(vga + offset) = char;
+            *(vga + offset + 1) = color;
+
+            current_col = current_col + 1;
+        }
+    }
+}
+
+pub fun print_char(char: Char) {
+    var bg: BackgroundColor = BackgroundColor.Black;
+    var fg: ForegroundColor = ForegroundColor.White;
+
+    print_char(char, bg, fg);
+}
+
+pub fun print_char(char: Char, fg: ForegroundColor) {
+    var bg: BackgroundColor = BackgroundColor.Black;
+
+    print_char(char, bg, fg);
+}
+
+pub fun print(char: Char, bg: BackgroundColor) {
+    var fg: ForegroundColor = ForegroundColor.White;
+
+    print_char(char, bg, fg);
 }

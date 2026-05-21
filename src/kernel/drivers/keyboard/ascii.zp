@@ -1,0 +1,36 @@
+import "../../c_helpers/int_helper" { get_int_from_char };
+
+pub fun raw_key_to_ascii(keychar: Char) Char {
+    var key: Int = get_int_from_char(keychar);
+
+    if key == 0x1E { return 'a'; }
+    if key == 0x30 { return 'b'; }
+    if key == 0x2E { return 'c'; }
+    if key == 0x20 { return 'd'; }
+    if key == 0x12 { return 'e'; }
+    if key == 0x21 { return 'f'; }
+    if key == 0x22 { return 'g'; }
+    if key == 0x23 { return 'h'; }
+    if key == 0x17 { return 'i'; }
+    if key == 0x24 { return 'j'; }
+    if key == 0x25 { return 'k'; }
+    if key == 0x26 { return 'l'; }
+    if key == 0x32 { return 'm'; }
+    if key == 0x31 { return 'n'; }
+    if key == 0x18 { return 'o'; }
+    if key == 0x19 { return 'p'; }
+    if key == 0x10 { return 'q'; }
+    if key == 0x13 { return 'r'; }
+    if key == 0x1F { return 's'; }
+    if key == 0x14 { return 't'; }
+    if key == 0x16 { return 'u'; }
+    if key == 0x2F { return 'v'; }
+    if key == 0x11 { return 'w'; }
+    if key == 0x2D { return 'x'; }
+    if key == 0x15 { return 'y'; }
+    if key == 0x2C { return 'z'; }
+    if key == 0x39 { return ' '; }
+    if key == 0x1C { return '\n'; }
+
+    return '\0';
+}

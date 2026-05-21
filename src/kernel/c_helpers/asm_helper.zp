@@ -1,0 +1,1 @@
+pub ext fun asm_inb(port: Int) Char;

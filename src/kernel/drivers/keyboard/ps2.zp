@@ -1,0 +1,16 @@
+import "../../c_helpers/asm_helper" { asm_inb };
+import "../../c_helpers/int_helper" { get_int_from_char };
+
+fun read_key() Char {
+    return asm_inb(0x60);
+}
+
+fun keyboard_ready() Int {
+    var status: Int = get_int_from_char(asm_inb(0x64));
+    return status & 1;
+}
+
+pub fun get_key() Char {
+    while (keyboard_ready() == 0) {};
+    return read_key();
+}

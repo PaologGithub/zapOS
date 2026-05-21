@@ -1,0 +1,2 @@
+pub ext fun get_char_from_int(charint: Int) Char;
+pub ext fun get_int_from_char(intchar: Char) Int;
