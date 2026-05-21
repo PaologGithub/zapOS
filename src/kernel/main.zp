@@ -1,8 +1,10 @@
 import "drivers/display/vga" as vga_display;
+import "drivers/display/vga_color" { ForegroundColor };
 
 @extern("C")
 fun kmain() {
-    vga_display.println("KERNEL OK\nWelcome to zapOS");
+    vga_display.println("KERNEL OK", ForegroundColor.Green);
+    vga_display.println("Welcome to zapOS");
     vga_display.println("Hello, World!");
     vga_display.println("It works!");
 

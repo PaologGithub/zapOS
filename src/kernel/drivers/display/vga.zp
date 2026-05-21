@@ -1,4 +1,6 @@
-ext fun get_shift_in() Char;
+import "vga_color" { ForegroundColor, BackgroundColor };
+
+ext fun get_char_from_int(charint: Int) Char;
 ext fun get_string_len(s: *Char) Int;
 ext fun get_char_at(s: *Char, i: Int) Char;
 
@@ -7,10 +9,10 @@ global var current_row: Int;
 
 // For printing single-lines strings
 // Internal helper
-fun print(chars: *Char) {
+fun print_text(chars: *Char, color: Char) {
     unsafe {
         var vga: *Char = 0xB8000 as *Char;
-        var shift_in: Char = get_shift_in();
+        var shift_in: Char = get_char_from_int(0x0F);
 
         var i: Int = 0;
         var len: Int = get_string_len(chars);
@@ -25,7 +27,7 @@ fun print(chars: *Char) {
                 var offset: Int = ((current_row * 80) + current_col) * 2;
 
                 *(vga + offset) = char;
-                *(vga + offset + 1) = shift_in;
+                *(vga + offset + 1) = color;
 
                 current_col = current_col + 1;
             }
@@ -33,15 +35,90 @@ fun print(chars: *Char) {
     }
 }
 
+// Get color int from color
+fun get_color(bg: BackgroundColor, fg: ForegroundColor) Char {
+    var bg_int: Int = 0;
+    var fg_int: Int = 0;
+
+    if bg == BackgroundColor.Black { bg_int = 0; }
+        else if bg == BackgroundColor.Blue { bg_int = 1; }
+        else if bg == BackgroundColor.Green { bg_int = 2; }
+        else if bg == BackgroundColor.Cyan { bg_int = 3; }
+        else if bg == BackgroundColor.Red { bg_int = 4; }
+        else if bg == BackgroundColor.Magenta { bg_int = 5; }
+        else if bg == BackgroundColor.Brown { bg_int = 6; }
+        else if bg == BackgroundColor.LightGray { bg_int = 7; }
+
+    if fg == ForegroundColor.Black { fg_int = 0; }
+        else if fg == ForegroundColor.Blue { fg_int = 1; }
+        else if fg == ForegroundColor.Green { fg_int = 2; }
+        else if fg == ForegroundColor.Cyan { fg_int = 3; }
+        else if fg == ForegroundColor.Red { fg_int = 4; }
+        else if fg == ForegroundColor.Magenta { fg_int = 5; }
+        else if fg == ForegroundColor.Brown { fg_int = 6; }
+        else if fg == ForegroundColor.LightGray { fg_int = 7; }
+        else if fg == ForegroundColor.DarkGray { fg_int = 8; }
+        else if fg == ForegroundColor.LightBlue { fg_int = 9; }
+        else if fg == ForegroundColor.LightGreen { fg_int = 10; }
+        else if fg == ForegroundColor.LightCyan { fg_int = 11; }
+        else if fg == ForegroundColor.LightRed { fg_int = 12; }
+        else if fg == ForegroundColor.LightMagenta { fg_int = 13; }
+        else if fg == ForegroundColor.Yellow { fg_int = 14; }
+        else if fg == ForegroundColor.White { fg_int = 15; }
+
+    return get_char_from_int((bg_int << 4) | fg_int);
+}
+
+
 // Print the text and add an \n at the end
-pub fun println(text: String) {
-    print(text as *Char);
+pub fun println(text: String, bg: BackgroundColor, fg: ForegroundColor) {
+    print_text(text as *Char, get_color(bg, fg));
 
     current_col = 0;
     current_row = current_row + 1;
 }
 
+pub fun println(text: String) {
+    var bg: BackgroundColor = BackgroundColor.Black;
+    var fg: ForegroundColor = ForegroundColor.White;
+
+    println(text, bg, fg);
+}
+
+pub fun println(text: String, fg: ForegroundColor) {
+    var bg: BackgroundColor = BackgroundColor.Black;
+
+    println(text, bg, fg);
+}
+
+pub fun println(text: String, bg: BackgroundColor) {
+    var fg: ForegroundColor = ForegroundColor.White;
+
+    println(text, bg, fg);
+}
+
+
+
 // Print the text
+pub fun print(text: String, bg: BackgroundColor, fg: ForegroundColor) {
+    print_text(text as *Char, get_color(bg, fg));
+}
+
 pub fun print(text: String) {
-    print(text as *Char);
+    var bg: BackgroundColor = BackgroundColor.Black;
+    var fg: ForegroundColor = ForegroundColor.White;
+
+    print(text, bg, fg);
+}
+
+pub fun print(text: String, fg: ForegroundColor) {
+    var bg: BackgroundColor = BackgroundColor.Black;
+
+    print(text, bg, fg);
+}
+
+pub fun print(text: String, bg: BackgroundColor) {
+    var fg: ForegroundColor = ForegroundColor.White;
+
+    print(text, bg, fg);
 }
