@@ -1,0 +1,38 @@
+ext fun get_shift_in() Char;
+ext fun get_string_len(s: *Char) Int;
+ext fun get_char_at(s: *Char, i: Int) Char;
+
+@extern("C")
+fun kmain() {
+    unsafe {
+        var vga: *Char = 0xB8000 as *Char;
+        var shift_in: Char = get_shift_in();
+
+        print_text("Hello, World!", 0);
+    }
+
+    while (true) {}
+}
+
+fun print_text(s: String, cursor: Int) {
+    var chars: *Char = s as *Char;
+
+    unsafe {
+        var vga: *Char = 0xB8000 as *Char;
+
+        var shift_in: Char = get_shift_in();
+
+        var i: Int = 0;
+        var len: Int = get_string_len(chars);
+
+        while i < len {
+            var char: Char = get_char_at(chars, i);
+
+            *(vga + cursor) = char;
+            *(vga + cursor + 1) = shift_in;
+            
+            cursor = cursor + 2;
+            i = i + 1;
+        }
+    }
+}

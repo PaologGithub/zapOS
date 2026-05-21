@@ -1,0 +1,1 @@
+sudo apt install gcc-multilib nasm grub-common xorriso grub-pc-bin
