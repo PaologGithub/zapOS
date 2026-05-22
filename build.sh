@@ -1,3 +1,5 @@
+echo "DEPRECATED: Use 'python3 build.py' instead"
+
 # Prepare
 mkdir build
 mkdir build/output
